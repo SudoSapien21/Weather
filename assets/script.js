@@ -1,4 +1,4 @@
-var apiKey ='4a308cd6162170536dbf37365b6c437f';
+var apiKey = '47150266341be89cf81b739187a460e5';
 
 // Check if API key exists in localStorage
 var storedApiKey = localStorage.getItem('apiKey');
@@ -6,28 +6,36 @@ if (storedApiKey) {
   apiKey = storedApiKey;
 } else {
   // Prompt the user to enter the API key and store it in localStorage
-  var userApiKey = prompt('4a308cd6162170536dbf37365b6c437f');
+  var userApiKey = prompt('Please enter your API key');
   localStorage.setItem('apiKey', userApiKey);
   apiKey = userApiKey;
 }
 
 
   async function fetchWeatherData(city) {
-    var url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+    var locationUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
   
     try {
-      var response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Weather data not found.');
+      var locationResponse = await fetch(locationUrl);
+      if (!locationResponse.ok) {
+        console.error('City not Found!');
+        return;
       }
-      var data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error:', error);
-    }
+      var locationData = await locationResponse.json();
+      var { lat, lon } = locationData.coord;
+
+ // Fetch weather data using latitude and longitude
+ var weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+ var response = await fetch(weatherUrl);
+ if (!response.ok) {
+   throw new Error('Weather data not found.');
+ }
+ var data = await response.json();
+ return data;
+} catch (error) {
+ console.error('Error:', error);
   }
-
-
+}
 // Function to display current weather for a city
 function displayCurrentWeather(weather) {
   var { name } = weather.city;
@@ -79,12 +87,15 @@ function convertKelvinToCelsius(kelvin) {
 }
 
 // Function to handle the form submission
-async function handleFormSubmit(event) {
+async function handleFormSubmit(event, city) {
   event.preventDefault();
   var cityInput = document.getElementById('city-input');
-  var city = cityInput.value.trim();
 
-  if (city) {
+  if (!city) {
+    city = cityInput.value.trim();
+  }
+
+  if (city) { // This block should be inside the if (city) condition
     var weatherData = await fetchWeatherData(city);
     if (weatherData) {
       displayCurrentWeather(weatherData);
@@ -94,9 +105,8 @@ async function handleFormSubmit(event) {
       var searchHistory = document.getElementById('search-history');
       var searchItem = document.createElement('li');
       searchItem.textContent = city;
-      searchItem.addEventListener('click', () => {
-        cityInput.value = city;
-        handleFormSubmit(event);
+      searchItem.addEventListener('click', () => {      
+        handleFormSubmit(event, city);
       });
       searchHistory.prepend(searchItem);
     }
@@ -104,6 +114,7 @@ async function handleFormSubmit(event) {
 
   cityInput.value = '';
 }
+
 
 // Attach event listener to the form submit event
 var searchForm = document.getElementById('search-form');
