@@ -78,8 +78,25 @@ function displayForecast(weather) {
 
 // Function to format the date
 function formatDate(timestamp) {
-  const date = new Date(timestamp * 1000);
-  const options = { year: 'numeric', month: 'long', year: 'numeric' };
+  return timeConverter(timestamp);
+}
+
+// Your timeConverter function
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+function formatDate(timestamp) {
+  const date = new Date(timestamp * 1000); // Multiply by 1000 to convert to milliseconds
+  const options = { month: 'long', day: 'numeric', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 
@@ -108,7 +125,7 @@ async function handleFormSubmit(event, city) {
       var searchItem = document.createElement('li');
       // searchItem.textContent = city;
       searchItem.addEventListener('click', () => {
-        cityInput.value = CITY;
+        cityInput.value = city;
         handleFormSubmit(event);
       });
       searchHistory.prepend(searchItem);

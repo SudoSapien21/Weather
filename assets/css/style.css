@@ -49,7 +49,7 @@ body, h1, h2, p, ul, li {
     margin-bottom: 10px;
   }
   
-  .search-history {
+   #search-history {
     list-style: none;
     padding: 0;
   }

@@ -27,4 +27,4 @@ WS3schools.com
 Youtube.com/Jonah Lawrence Dev Pro Tips
 Murach's HTML5 and CSS3 book 
 
- ![SS](./assets/SS.jpg)
+ ![alt](./assets/images/SS.jpg)
