@@ -123,9 +123,9 @@ async function handleFormSubmit(event, city) {
       // Add city to search history
       var searchHistory = document.getElementById('search-history');
       var searchItem = document.createElement('li');
-      // searchItem.textContent = city;
+      searchItem.textContent = city;
       searchItem.addEventListener('click', () => {
-        cityInput.value = city;
+        cityInput.value = searchItem.textContent;
         handleFormSubmit(event);
       });
       searchHistory.prepend(searchItem);
