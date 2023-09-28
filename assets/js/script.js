@@ -78,8 +78,8 @@ function displayForecast(weather) {
 
 // Function to format the date
 function formatDate(timestamp) {
-  var date = new Date(timestamp);
-  var options = { month: 'numeric', day: 'numeric', year: 'numeric' };
+  const date = new Date(timestamp * 1000);
+  const options = { year: 'numeric', month: 'long', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 
@@ -108,7 +108,8 @@ async function handleFormSubmit(event, city) {
       var searchItem = document.createElement('li');
       // searchItem.textContent = city;
       searchItem.addEventListener('click', () => {
-        handleFormSubmit(event, city);
+        cityInput.value = CITY;
+        handleFormSubmit(event);
       });
       searchHistory.prepend(searchItem);
     }
